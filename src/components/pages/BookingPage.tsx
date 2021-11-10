@@ -6,7 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {Container} from "@mui/material";
+import {Button, Container} from "@mui/material";
 
 interface Column {
     type: 'date' | 'djName' | 'vjName';
@@ -53,6 +53,7 @@ export default function BookingPage() {
             <p>Ghost Week3の募集です(テストデータ)</p>
             {/* 日程と参加希望状況 */}
             <h3>日程と参加希望状況</h3>
+            <Button variant="contained">参加申請</Button>
             <Paper sx={{width: '100%'}}>
                 <TableContainer sx={{maxHeight: 440}}>
                     <Table stickyHeader aria-label="sticky table">
