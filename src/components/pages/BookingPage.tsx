@@ -61,7 +61,7 @@ export default function BookingPage(props: any) {
     }, [params.id])
 
     if (eventInfo === undefined) {
-        return (<>イベントデータがありません</>);
+        return (<></>);
     }
 
     let columnId = 1;

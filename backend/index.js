@@ -4,6 +4,7 @@ const app = express()
 const port = process.env.PORT || 3001
 
 app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.json())
 
 app.get("/api/events", (req, res) => {
     res.json({
@@ -30,9 +31,28 @@ app.get("/api/event/:id", (req, res) => {
         djs: ['Ohagi', 'tar_bin', 'cocothume'],
         vjs: ['Tuna', 'KillU'],
         dates: [
-            {id: 1, date: "2020/11/10", djStatuses: {'Ohagi': 1, 'tar_bin': 1, 'cocothume': 1}, vjStatuses: {'Tuna': 1, 'KillU': 1}},
-            {id: 2, date: "2020/11/17", djStatuses: {'Ohagi': 1, 'tar_bin': 1, 'cocothume': 1}, vjStatuses: {'Tuna': 1, 'KillU': 0}},
+            {
+                id: 1,
+                date: "2020/11/10",
+                djStatuses: {'Ohagi': 1, 'tar_bin': 1, 'cocothume': 1},
+                vjStatuses: {'Tuna': 1, 'KillU': 1}
+            },
+            {
+                id: 2,
+                date: "2020/11/17",
+                djStatuses: {'Ohagi': 1, 'tar_bin': 1, 'cocothume': 1},
+                vjStatuses: {'Tuna': 1, 'KillU': 0}
+            },
         ]
+    });
+});
+
+app.post("/api/registerEvent", (req, res) => {
+    //TODO: イベントを新規作成
+    console.log(req.body)
+    //TODO: 作成したIDを返却
+    res.json({
+        id: 1
     });
 });
 
