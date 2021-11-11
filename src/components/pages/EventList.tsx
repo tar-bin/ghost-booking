@@ -6,36 +6,42 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import {Container} from "@mui/material";
-import { useState,useEffect } from 'react'
+import {useState, useEffect} from 'react'
+
+interface Event {
+    id: number
+    name: string
+    description: string
+}
 
 export default function EventList() {
-    const [message, setMessage] = useState('');
-    useEffect(() =>{
-        fetch('/api')
+    const [events, setEvents] = useState<Event[]>([]);
+    useEffect(() => {
+        fetch('/api/events')
             .then((res) => res.json())
-            .then((data) => setMessage(data.message));
-    },[])
+            .then((data) => setEvents(data.events));
+    }, [])
     return (
         <Container>
             <h1>イベント一覧</h1>
             <Box sx={{width: '100%', bgcolor: 'background.paper'}}>
                 <nav aria-label="secondary mailbox folders">
                     <List>
-                        <ListItem disablePadding>
-                            <ListItemButton component="a" href="/event">
-                                <ListItemText primary="Ghost Week3"/>
-                            </ListItemButton>
-                        </ListItem>
-                        <Divider/>
-                        <ListItem disablePadding>
-                            <ListItemButton component="a" href="#simple-list">
-                                <ListItemText primary="通常開催"/>
-                            </ListItemButton>
-                        </ListItem>
+                        {events.map(value => {
+                            return (
+                                <>
+                                    <ListItem disablePadding>
+                                        <ListItemButton component="a" href={"/event/" + value.id}>
+                                            <ListItemText primary={value.name}/>
+                                        </ListItemButton>
+                                    </ListItem>
+                                    <Divider/>
+                                </>
+                            )
+                        })}
                     </List>
                 </nav>
             </Box>
-            <p>{ message }</p>
         </Container>
     );
 }
