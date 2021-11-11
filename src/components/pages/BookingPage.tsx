@@ -12,7 +12,7 @@ import {useParams} from "react-router";
 
 interface Column {
     id: number;
-    type: 'date' | 'djName' | 'vjName';
+    type: 'date' | 'dj' | 'vj';
     label: string;
     minWidth?: number;
     align?: 'right';
@@ -35,10 +35,20 @@ function createData(
     return {id, date, djStatuses, vjStatuses};
 }
 
+interface EventDate {
+    id: number
+    date: string
+    djStatuses: any,
+    vjStatuses: any,
+}
+
 interface Event {
     id: number
     name: string
     description: string
+    djs: string[]
+    vjs: string[]
+    dates: EventDate[]
 }
 
 export default function BookingPage(props: any) {
@@ -50,25 +60,32 @@ export default function BookingPage(props: any) {
             .then((data) => setEventInfo(data));
     }, [params.id])
 
-    const columns: Column[] = [
-        {id: 1, type: 'date', label: '日程', minWidth: 170},
-        {id: 2, type: 'djName', label: 'Ohagi'},
-        {id: 3, type: 'djName', label: 'tar_bin'},
-        {id: 4, type: 'vjName', label: 'Tuna'},
-        {id: 5, type: 'vjName', label: 'KillU'},
-    ];
+    if (eventInfo === undefined) {
+        return (<>イベントデータがありません</>);
+    }
 
-    const rows = [
-        createData(1, '2020/11/10 (22:00 JST)', {'Ohagi': '○', 'tar_bin': '○'}, {'Tuna': '○', 'KillU': '○'}),
-        createData(2, '2020/11/17 (22:00 JST)', {'Ohagi': '○', 'tar_bin': '○'}, {'Tuna': '×', 'KillU': '○'}),
-    ];
+    let columnId = 1;
+    let columns: Column[] = [
+        {id: 1, type: 'date', label: '日程', minWidth: 170},
+    ]
+
+    eventInfo.djs.forEach(value => {
+        columnId+=1;
+        columns.push({id: columnId, type: 'dj', label: value});
+    })
+    eventInfo.vjs.forEach(value => {
+        columnId+=1;
+        columns.push({id: columnId, type: 'vj', label: value});
+    })
+
+    const rows = eventInfo.dates.map(value => createData(value.id, value.date, value.djStatuses, value.vjStatuses))
 
     return (
         <Container>
             {/* イベント名 */}
-            <h1>{eventInfo?.name}</h1>
+            <h1>{eventInfo.name}</h1>
             {/* 説明 */}
-            <p>{eventInfo?.description}</p>
+            <p>{eventInfo.description}</p>
             {/* 日程と参加希望状況 */}
             <h3>日程と参加希望状況</h3>
             <Button variant="contained">参加申請</Button>
@@ -78,10 +95,10 @@ export default function BookingPage(props: any) {
                         <TableHead>
                             <TableRow>
                                 <TableCell align="left" colSpan={1}/>
-                                <TableCell align="left" colSpan={2}>
+                                <TableCell align="left" colSpan={eventInfo.djs.length}>
                                     DJ
                                 </TableCell>
-                                <TableCell align="left" colSpan={2}>
+                                <TableCell align="left" colSpan={eventInfo.vjs.length}>
                                     VJ
                                 </TableCell>
                             </TableRow>
@@ -111,7 +128,7 @@ export default function BookingPage(props: any) {
                                                     </TableCell>
                                                 );
                                             }
-                                            if (column.type === "djName" && column.label !== undefined) {
+                                            if (column.type === "dj" && column.label !== undefined) {
                                                 const map = row["djStatuses"];
                                                 return (
                                                     <TableCell key={column.id} align={column.align}>
@@ -119,7 +136,7 @@ export default function BookingPage(props: any) {
                                                     </TableCell>
                                                 );
                                             }
-                                            if (column.type === "vjName" && column.label !== undefined) {
+                                            if (column.type === "vj" && column.label !== undefined) {
                                                 const map = row["vjStatuses"];
                                                 return (
                                                     <TableCell key={column.id} align={column.align}>

@@ -27,6 +27,12 @@ app.get("/api/event/:id", (req, res) => {
         id: 1,
         name: "Ghost Week3",
         description: "Ghost Week3 説明",
+        djs: ['Ohagi', 'tar_bin', 'cocothume'],
+        vjs: ['Tuna', 'KillU'],
+        dates: [
+            {id: 1, date: "2020/11/10", djStatuses: {'Ohagi': 1, 'tar_bin': 1, 'cocothume': 1}, vjStatuses: {'Tuna': 1, 'KillU': 1}},
+            {id: 2, date: "2020/11/17", djStatuses: {'Ohagi': 1, 'tar_bin': 1, 'cocothume': 1}, vjStatuses: {'Tuna': 1, 'KillU': 0}},
+        ]
     });
 });
 
