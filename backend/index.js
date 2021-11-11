@@ -2,6 +2,11 @@ const express = require('express')
 const path = require("path");
 const app = express()
 const port = process.env.PORT || 3001
+const { Sequelize } = require('sequelize');
+
+require('dotenv').config()
+
+const sequelize = new Sequelize(process.env.DATABASE_URL)
 
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.json())
@@ -60,6 +65,11 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'));
 });
 
-app.listen(port, () => {
-    console.log(`listening on *:${port}`);
+app.listen(port, async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
 })
