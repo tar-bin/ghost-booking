@@ -44,15 +44,17 @@ app.get("/api/event/:id", (req, res) => {
 
 app.post("/api/registerEvent", (req, res) => {
     const data = req.body;
-    //TODO: イベントを新規作成
+    //イベントを新規作成
     db.Events.create({
         name: data.name,
         description: data.description
+    }).then(event => {
+        //作成したIDを返却
+        res.json({
+            id: event.id
+        });
     })
-    //TODO: 作成したIDを返却
-    res.json({
-        id: 1
-    });
+    //TODO: イベントごとの日付を指定
 });
 
 app.get('*', (req, res) => {
