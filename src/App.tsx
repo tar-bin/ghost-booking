@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {styled} from '@mui/material/styles';
 import BookingPage from "./components/pages/BookingPage";
 import {Route, Routes} from "react-router";
 import EventList from "./components/pages/EventList";

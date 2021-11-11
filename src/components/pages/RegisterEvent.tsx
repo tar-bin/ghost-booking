@@ -1,9 +1,9 @@
 import React from 'react';
 import {Container, FormControl, TextField} from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 export default function RegisterEvent(props: any) {
-    const { control, handleSubmit } = useForm({
+    const { handleSubmit } = useForm({
         defaultValues: {
             checkBox: false,
             textBox: "",
