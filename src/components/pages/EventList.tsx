@@ -6,8 +6,15 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import {Container} from "@mui/material";
+import { useState,useEffect } from 'react'
 
 export default function EventList() {
+    const [message, setMessage] = useState('');
+    useEffect(() =>{
+        fetch('/api')
+            .then((res) => res.json())
+            .then((data) => setMessage(data.message));
+    },[])
     return (
         <Container>
             <h1>イベント一覧</h1>
@@ -28,6 +35,7 @@ export default function EventList() {
                     </List>
                 </nav>
             </Box>
+            <p>{ message }</p>
         </Container>
     );
 }
