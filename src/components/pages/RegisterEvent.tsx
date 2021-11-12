@@ -58,7 +58,6 @@ export default function RegisterEvent() {
 
     return (
         <Container>
-            <h1>イベント新規登録</h1>
             <FormControl fullWidth sx={{m: 1}}>
                 <TextField
                     id="event-name"

@@ -16,10 +16,24 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import {ListItemButton} from "@mui/material";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 const drawerWidth = 200;
 
 function App() {
+    const navigate = useNavigate();
+    const [pageName, setPageName] = useState<string>("イベント一覧");
+
+    const handleOnClickEventList = (event: any) => {
+        setPageName("イベント一覧")
+        navigate("/")
+    }
+    const handleOnClickRegisterEvent = (event: any) => {
+        setPageName("イベント登録")
+        navigate("/registerNewEvent")
+    }
+
     return (
         <Box sx={{display: 'flex'}}>
             <CssBaseline/>
@@ -29,7 +43,7 @@ function App() {
             >
                 <Toolbar>
                     <Typography variant="h6" noWrap component="div">
-                        イベント登録
+                        {pageName}
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -49,7 +63,7 @@ function App() {
                 <Divider/>
                 <List>
                     <ListItem disablePadding>
-                        <ListItemButton component="a" href="/">
+                        <ListItemButton onClick={handleOnClickEventList}>
                             <ListItemIcon>
                                 <AutoStoriesIcon/>
                             </ListItemIcon>
@@ -57,7 +71,7 @@ function App() {
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding>
-                        <ListItemButton component="a" href="/registerNewEvent">
+                        <ListItemButton onClick={handleOnClickRegisterEvent}>
                             <ListItemIcon>
                                 <AutoStoriesIcon/>
                             </ListItemIcon>

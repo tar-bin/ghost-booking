@@ -23,7 +23,6 @@ export default function EventList() {
     }, [])
     return (
         <Container>
-            <h1>イベント一覧</h1>
             <Box sx={{width: '100%', bgcolor: 'background.paper'}}>
                 <nav aria-label="secondary mailbox folders">
                     <List>
