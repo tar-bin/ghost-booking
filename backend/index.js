@@ -12,6 +12,10 @@ const db = require("../models/index");
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.json())
 
+function uniq(array) {
+    return array.filter((elem, index, self) => self.indexOf(elem) === index);
+}
+
 app.get("/api/events", (req, res) => {
     db.Events.findAll().then((events) => {
         res.json({
@@ -23,12 +27,19 @@ app.get("/api/events", (req, res) => {
 app.get("/api/event/:id", async (req, res) => {
     const event = await db.Events.findByPk(req.params.id);
     const dates = await db.EventDates.findAll({where: {eventId: event.id}});
-    const eventDates = dates.map(value => {
+    const users = await db.EventUserData.findAll({where: {eventId: event.id}});
+    const djs = await db.EventUserTypes.findAll({where: {eventId: event.id, value: 0}});
+    const vjs = await db.EventUserTypes.findAll({where: {eventId: event.id, value: 1}});
+    const statuses = await db.EventUserStatus.findAll({where: {eventId: event.id}});
+
+    const eventDates = dates.map((date) => {
+        const djStatuses = djs.filter(dj => dj.dateId === date.id)
+        const vjStatuses = vjs.filter(vj => vj.dateId === date.id)
         return {
-            id: value.id,
-            date: moment(value.date).format("YYYY/MM/DD"),
-            djStatuses: {'Ohagi': 1, 'tar_bin': 1, 'cocothume': 1},
-            vjStatuses: {'Tuna': 1, 'KillU': 1}
+            id: date.id,
+            date: moment(date.date).format("YYYY/MM/DD"),
+            djStatuses: djStatuses,
+            vjStatuses: vjStatuses
         }
     })
 
@@ -36,8 +47,10 @@ app.get("/api/event/:id", async (req, res) => {
         id: event.id,
         name: event.name,
         description: event.description,
-        djs: ['Ohagi', 'tar_bin', 'cocothume'],
-        vjs: ['Tuna', 'KillU'],
+        djs: uniq(djs.map(vj => vj.userId)),
+        vjs: uniq(vjs.map(vj => vj.userId)),
+        users: users,
+        statuses: statuses,
         dates: eventDates
     });
 });
@@ -65,7 +78,6 @@ app.post("/api/registerEvent", (req, res) => {
 
 app.post("/api/participationEvent", (req, res) => {
     const data = req.body;
-    console.log(data)
     db.EventUserData.create({
         name: data.name,
         eventId: data.id,

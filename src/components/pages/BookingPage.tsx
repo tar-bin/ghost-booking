@@ -10,6 +10,7 @@ import {Button, Container} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router";
 import ParticipationFormDialog from "../dialogs/ParticipationFormDialog";
+import userEvent from "@testing-library/user-event";
 
 interface Column {
     id: number;
@@ -47,8 +48,10 @@ interface Event {
     id: number
     name: string
     description: string
-    djs: string[]
-    vjs: string[]
+    djs: any[]
+    vjs: any[]
+    users: any[]
+    statuses: any[]
     dates: EventDate[]
 }
 
@@ -76,12 +79,15 @@ export default function BookingPage(props: any) {
     ]
 
     eventInfo.djs.forEach(value => {
+        console.log(value)
+        const user = eventInfo.users.filter(user => user.id === value)[0];
         columnId+=1;
-        columns.push({id: columnId, type: 'dj', label: value});
+        columns.push({id: columnId, type: 'dj', label: user.name});
     })
     eventInfo.vjs.forEach(value => {
+        const user = eventInfo.users.filter(user => user.id === value)[0];
         columnId+=1;
-        columns.push({id: columnId, type: 'vj', label: value});
+        columns.push({id: columnId, type: 'vj', label: user.name});
     })
 
     const rows = eventInfo.dates.map(value => createData(value.id, value.date, value.djStatuses, value.vjStatuses))
