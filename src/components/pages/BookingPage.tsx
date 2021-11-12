@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import {Button, Container} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router";
+import ParticipationFormDialog from "../dialogs/ParticipationFormDialog";
 
 interface Column {
     id: number;
@@ -91,7 +92,7 @@ export default function BookingPage(props: any) {
             <p>{eventInfo.description}</p>
             {/* 日程と参加希望状況 */}
             <h3>日程と参加希望状況</h3>
-            <Button variant="contained">参加申請</Button>
+            {/* 参加希望状況 */}
             <Paper sx={{width: '100%'}}>
                 <TableContainer sx={{maxHeight: 440}}>
                     <Table stickyHeader aria-label="sticky table">
@@ -154,6 +155,8 @@ export default function BookingPage(props: any) {
                     </Table>
                 </TableContainer>
             </Paper>
+            {/* 参加申請(ダイアログ) */}
+            <ParticipationFormDialog dates={eventInfo.dates}/>
         </Container>
     );
 }

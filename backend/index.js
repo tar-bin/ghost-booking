@@ -8,7 +8,6 @@ const port = process.env.PORT || 3001
 require('dotenv').config()
 
 const db = require("../models/index");
-const {dateRangePickerDayClasses} = require("@mui/lab");
 
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.json())

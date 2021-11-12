@@ -9,6 +9,9 @@ export default function RegisterEvent() {
     const [inputErrorName, setInputErrorName] = useState(false);
     const handleNameChange = (event: any) => {
         setName(event.target.value);
+        if (name === null || name === "") {
+            setInputErrorName(true)
+        }
     };
 
     const [description, setDescription] = useState('');
