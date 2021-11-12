@@ -11,6 +11,8 @@ export default function RegisterEvent() {
         setName(event.target.value);
         if (name === null || name === "") {
             setInputErrorName(true)
+        } else {
+            setInputErrorName(false)
         }
     };
 

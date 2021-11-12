@@ -14,6 +14,15 @@ module.exports = (sequelize, DataTypes) => {
       Events.hasMany(models.EventDates, {
         foreignKey: 'eventId'
       })
+      Events.hasMany(models.EventUserData, {
+        foreignKey: 'eventId'
+      })
+      Events.hasMany(models.EventUserStatus, {
+        foreignKey: 'eventId'
+      })
+      Events.hasMany(models.EventUserTypes, {
+        foreignKey: 'eventId'
+      })
     }
   };
   Events.init({

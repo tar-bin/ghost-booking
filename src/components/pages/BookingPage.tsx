@@ -156,7 +156,7 @@ export default function BookingPage(props: any) {
                 </TableContainer>
             </Paper>
             {/* 参加申請(ダイアログ) */}
-            <ParticipationFormDialog dates={eventInfo.dates}/>
+            <ParticipationFormDialog dates={eventInfo.dates} eventId={eventInfo.id}/>
         </Container>
     );
 }

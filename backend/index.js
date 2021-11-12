@@ -63,6 +63,35 @@ app.post("/api/registerEvent", (req, res) => {
     })
 });
 
+app.post("/api/participationEvent", (req, res) => {
+    const data = req.body;
+    console.log(data)
+    db.EventUserData.create({
+        name: data.name,
+        eventId: data.id,
+        comment: data.comment
+    }).then(user => {
+        data.dateStates.forEach(state => {
+            db.EventUserStatus.create({
+                eventId: data.id,
+                dateId: state[0],
+                userId: user.id,
+                value: state[1]
+            });
+        })
+        data.dateTypes.forEach(type => {
+            type[1].forEach(typeId => {
+                db.EventUserTypes.create({
+                    eventId: data.id,
+                    dateId: type[0],
+                    userId: user.id,
+                    value: typeId
+                });
+            })
+        })
+    });
+});
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'));
 });
