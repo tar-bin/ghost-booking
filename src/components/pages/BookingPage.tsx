@@ -52,8 +52,10 @@ interface Event {
 }
 
 export default function BookingPage(props: any) {
-    const [eventInfo, setEventInfo] = useState<Event>();
     const params = useParams();
+
+    const [eventInfo, setEventInfo] = useState<Event>();
+
     useEffect(() => {
         fetch('/api/event/' + params.id)
             .then((res) => res.json())
@@ -63,6 +65,9 @@ export default function BookingPage(props: any) {
     if (eventInfo === undefined) {
         return (<></>);
     }
+
+    //イベント名の表示
+    props.updateTitle(eventInfo.name)
 
     let columnId = 1;
     let columns: Column[] = [
@@ -82,8 +87,6 @@ export default function BookingPage(props: any) {
 
     return (
         <Container>
-            {/* イベント名 */}
-            <h1>{eventInfo.name}</h1>
             {/* 説明 */}
             <p>{eventInfo.description}</p>
             {/* 日程と参加希望状況 */}

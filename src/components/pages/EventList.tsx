@@ -1,12 +1,14 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
 import {Container} from "@mui/material";
 import {useState, useEffect} from 'react'
+import {useNavigate} from "react-router-dom";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 interface Event {
     id: number
@@ -15,32 +17,47 @@ interface Event {
 }
 
 export default function EventList() {
+    const navigate = useNavigate();
     const [events, setEvents] = useState<Event[]>([]);
+
     useEffect(() => {
         fetch('/api/events')
             .then((res) => res.json())
             .then((data) => setEvents(data.events));
     }, [])
+
+    const rows = events.map(value => {
+        return {id: value.id, name: value.name, description: value.description}
+    })
+    rows.sort((a, b) => b.id - a.id)
+
     return (
         <Container>
-            <Box sx={{width: '100%', bgcolor: 'background.paper'}}>
-                <nav aria-label="secondary mailbox folders">
-                    <List>
-                        {events.map(value => {
-                            return (
-                                <>
-                                    <ListItem disablePadding>
-                                        <ListItemButton component="a" href={"/event/" + value.id}>
-                                            <ListItemText primary={value.name}/>
-                                        </ListItemButton>
-                                    </ListItem>
-                                    <Divider/>
-                                </>
-                            )
-                        })}
-                    </List>
-                </nav>
-            </Box>
+            <TableContainer component={Paper}>
+                <Table sx={{minWidth: 650}} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>イベント名</TableCell>
+                            <TableCell>説明</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((row) => (
+                            <TableRow
+                                hover
+                                key={row.id}
+                                sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                onClick={() => {
+                                    navigate("/event/" + row.id)
+                                }}
+                            >
+                                <TableCell>{row.name}</TableCell>
+                                <TableCell>{row.description}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </Container>
     );
 }

@@ -88,7 +88,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<EventList/>}/>
                     <Route path="/registerNewEvent" element={<RegisterNewEvent/>}/>
-                    <Route path="/event/:id" element={<BookingPage/>}/>
+                    <Route path="/event/:id" element={<BookingPage updateTitle={(name: string) => setPageName(name)}/>}/>
                 </Routes>
             </Box>
         </Box>

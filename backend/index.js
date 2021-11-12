@@ -1,5 +1,7 @@
 const express = require('express')
 const path = require("path");
+const moment = require("moment");
+
 const app = express()
 const port = process.env.PORT || 3001
 
@@ -19,27 +21,25 @@ app.get("/api/events", (req, res) => {
     });
 });
 
-app.get("/api/event/:id", (req, res) => {
+app.get("/api/event/:id", async (req, res) => {
+    const event = await db.Events.findByPk(req.params.id);
+    const dates = await db.EventDates.findAll({where: {eventId: event.id}});
+    const eventDates = dates.map(value => {
+        return {
+            id: value.id,
+            date: moment(value.date).format("YYYY/MM/DD"),
+            djStatuses: {'Ohagi': 1, 'tar_bin': 1, 'cocothume': 1},
+            vjStatuses: {'Tuna': 1, 'KillU': 1}
+        }
+    })
+
     res.json({
-        id: 1,
-        name: "Ghost Week3",
-        description: "Ghost Week3 説明",
+        id: event.id,
+        name: event.name,
+        description: event.description,
         djs: ['Ohagi', 'tar_bin', 'cocothume'],
         vjs: ['Tuna', 'KillU'],
-        dates: [
-            {
-                id: 1,
-                date: "2020/11/10",
-                djStatuses: {'Ohagi': 1, 'tar_bin': 1, 'cocothume': 1},
-                vjStatuses: {'Tuna': 1, 'KillU': 1}
-            },
-            {
-                id: 2,
-                date: "2020/11/17",
-                djStatuses: {'Ohagi': 1, 'tar_bin': 1, 'cocothume': 1},
-                vjStatuses: {'Tuna': 1, 'KillU': 0}
-            },
-        ]
+        dates: eventDates
     });
 });
 
