@@ -10,11 +10,11 @@ import {Button, Container} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router";
 import ParticipationFormDialog from "../dialogs/ParticipationFormDialog";
-import userEvent from "@testing-library/user-event";
 
 interface Column {
     id: number;
     type: 'date' | 'dj' | 'vj';
+    userId?: number;
     label: string;
     minWidth?: number;
     align?: 'right';
@@ -79,15 +79,14 @@ export default function BookingPage(props: any) {
     ]
 
     eventInfo.djs.forEach(value => {
-        console.log(value)
         const user = eventInfo.users.filter(user => user.id === value)[0];
         columnId+=1;
-        columns.push({id: columnId, type: 'dj', label: user.name});
+        columns.push({id: columnId, userId: user.id, type: 'dj', label: user.name});
     })
     eventInfo.vjs.forEach(value => {
         const user = eventInfo.users.filter(user => user.id === value)[0];
         columnId+=1;
-        columns.push({id: columnId, type: 'vj', label: user.name});
+        columns.push({id: columnId, userId: user.id, type: 'vj', label: user.name});
     })
 
     const rows = eventInfo.dates.map(value => createData(value.id, value.date, value.djStatuses, value.vjStatuses))
@@ -139,18 +138,20 @@ export default function BookingPage(props: any) {
                                                 );
                                             }
                                             if (column.type === "dj" && column.label !== undefined) {
-                                                const map = row["djStatuses"];
+                                                const status = eventInfo?.statuses
+                                                    .filter(value => value.dateId === row.id && value.userId === column.userId)[0]
                                                 return (
                                                     <TableCell key={column.id} align={column.align}>
-                                                        {map[column.label]}
+                                                        {status.value}
                                                     </TableCell>
                                                 );
                                             }
                                             if (column.type === "vj" && column.label !== undefined) {
-                                                const map = row["vjStatuses"];
+                                                const status = eventInfo?.statuses
+                                                    .filter(value => value.dateId === row.id && value.userId === column.userId)[0]
                                                 return (
                                                     <TableCell key={column.id} align={column.align}>
-                                                        {map[column.label]}
+                                                        {status.value}
                                                     </TableCell>
                                                 );
                                             }

@@ -33,13 +33,9 @@ app.get("/api/event/:id", async (req, res) => {
     const statuses = await db.EventUserStatus.findAll({where: {eventId: event.id}});
 
     const eventDates = dates.map((date) => {
-        const djStatuses = djs.filter(dj => dj.dateId === date.id)
-        const vjStatuses = vjs.filter(vj => vj.dateId === date.id)
         return {
             id: date.id,
-            date: moment(date.date).format("YYYY/MM/DD"),
-            djStatuses: djStatuses,
-            vjStatuses: vjStatuses
+            date: moment(date.date).format("YYYY/MM/DD")
         }
     })
 
