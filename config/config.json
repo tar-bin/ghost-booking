@@ -1,6 +1,10 @@
 {
   "development": {
-    "use_env_variable": "DATABASE_URL"
+    "username": "postgres",
+    "password": "mPvWqWsNCX6hwPHD",
+    "database": "gbdb",
+    "host": "localhost",
+    "dialect": "postgres"
   },
   "test": {
     "use_env_variable": "DATABASE_URL"

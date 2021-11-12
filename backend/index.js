@@ -6,6 +6,7 @@ const port = process.env.PORT || 3001
 require('dotenv').config()
 
 const db = require("../models/index");
+const {dateRangePickerDayClasses} = require("@mui/lab");
 
 app.use(express.static(path.join(__dirname, '../build')));
 app.use(express.json())
@@ -53,8 +54,14 @@ app.post("/api/registerEvent", (req, res) => {
         res.json({
             id: event.id
         });
+
+        data.dates?.forEach(date => {
+            db.EventDates.create({
+                date: date,
+                eventId: event.id
+            })
+        })
     })
-    //TODO: イベントごとの日付を指定
 });
 
 app.get('*', (req, res) => {
