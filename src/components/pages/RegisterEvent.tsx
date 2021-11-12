@@ -50,7 +50,6 @@ export default function RegisterEvent() {
                 <TextField
                     id="event-description"
                     label="説明"
-                    required
                     value={description}
                     onChange={handleDescriptionChange}
                 />
